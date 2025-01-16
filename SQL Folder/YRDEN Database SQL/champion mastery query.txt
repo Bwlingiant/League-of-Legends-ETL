@@ -1,0 +1,9 @@
+SELECT distinct COUNT(champion_name) OVER (partition by yp.summoner_id), yp.name
+FROM "YRDEN".lol_champ_mastery lcm
+LEFT JOIN "LOLLOV".lol_champs lov ON
+lcm.championid = lov.champion_id
+LEFT JOIN "YRDEN".yrden_people yp ON
+lcm.summonerid = yp.summoner_id
+WHERE lcm.championlevel in (5,6,7)
+ORDER BY COUNT(champion_name) OVER (partition by yp.summoner_id) DESC
+;

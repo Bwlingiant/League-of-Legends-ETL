@@ -1,0 +1,2 @@
+INSERT INTO "YRDEN".yrden_people (name, summoner_name)
+VALUES ('name', 'summoner_name');

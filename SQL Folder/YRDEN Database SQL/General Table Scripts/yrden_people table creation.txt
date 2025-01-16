@@ -1,0 +1,6 @@
+CREATE TABLE people 
+(person_id serial PRIMARY KEY, 
+riot_puuid varchar, 
+riot_id varchar, 
+riot_key varchar, 
+summoner_id varchar);

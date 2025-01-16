@@ -1,0 +1,7 @@
+CREATE TABLE lol_game_data(riot_id varchar, riot_puuid varchar, game_duration real, game_mode varchar, queue_id int, game_patch varchar, champion_id int, champion_name varchar, lane varchar,
+teamid int, win boolean, kills real, deaths real, assists real, double_kills real, triple_kills real, quadra_kills real, penta_kills real, gold_earned real, champion_damage real, objective_damage real,
+damage_healed real, vision_score real, minions_killed real, neutral_monsters_killed real, keystone_rune_code int, keystone_rune_var1 int, keystone_rune_var2 int, keystone_rune_var3 int,
+primary_rune_code1 int, primary_rune_code2 int, primary_rune_code3 int, primary_rune1_var1 int, primary_rune1_var2 int, primary_rune1_var3 int, primary_rune2_var1 int, primary_rune2_var2 int, primary_rune3_var3 int,
+primary_rune2_var3 int, primary_rune3_var1 int, primary_rune3_var2 int, secondary_rune_code1 int, secondary_rune_code2 int, secondary_rune1_var1 int, secondary_rune1_var2 int, secondary_rune1_var3 int,
+secondary_rune2_var1 int, secondary_rune2_var2 int, secondary_rune2_var3 int, largest_critical_strike real, nexus_kills real, summoner1_id int, summoner1_casts real, summoner2_id int, summoner2_casts real,
+control_wards_purchased real, wards_killed real, wards_placed real, game_id varchar);

@@ -1,0 +1,13 @@
+DROP TABLE "LOLLOV".LOL_RUNES
+;
+
+CREATE TABLE "LOLLOV".LOL_RUNES
+
+(rune_id smallint,
+ rune_name varchar,
+ CONSTRAINT unique_rune_id UNIQUE (rune_id)
+ )
+;
+
+CREATE INDEX idx_rune_id ON "LOLLOV".LOL_RUNES (rune_id)
+;

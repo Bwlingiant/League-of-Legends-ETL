@@ -1,0 +1,13 @@
+DROP TABLE "YRDEN".lol_champ_mastery;
+
+CREATE TABLE "YRDEN".lol_champ_mastery
+(puuid varchar , 
+            summonerId varchar,
+            championId int , 
+            championLevel int ,
+            championPoints int ,
+            championPointsUntilNextLevel int,
+            championPointsSinceLastLevel int,
+            chestGranted boolean,
+			tokensEarned int
+            )

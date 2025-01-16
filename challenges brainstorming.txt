@@ -1,0 +1,7 @@
+Imagination Capstone example
+between Iron and Bronze, need 100 points from one tier to the next. Do not use 75/175 for percentage calculation.
+
+Breakpoint - current
+
+% progress = 100 * ((Current points - Last breakpoint)/(Nexxt breakpoint - Last Breakpoint))
+This calculation should become a procedure

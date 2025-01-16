@@ -1,0 +1,10 @@
+CREATE TABLE new_table AS SELECT * FROM old_table WHERE 1 = 0;
+	
+ALTER TABLE new_table ADD COLUMN column_desired datatype_desired;
+
+INSERT INTO new_table SELECT *, NULL AS game_duration 
+	FROM old_table;
+	
+ALTER TABLE old_table RENAME TO old_table2
+ALTER TABLE new_table RENAME TO old_table;
+DROP TABLE old_table2

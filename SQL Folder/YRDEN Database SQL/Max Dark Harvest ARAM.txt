@@ -1,0 +1,9 @@
+SELECT * FROM
+(
+select distinct MAX(keystone_rune_var2) OVER (partition by keystone_rune_code, summoner_name),
+summoner_name
+from "YRDEN".lol_game_data
+WHERE keystone_rune_code = 8128
+AND game_mode = 'ARAM') subq
+order by MAX desc
+;
