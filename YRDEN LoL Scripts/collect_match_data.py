@@ -4,20 +4,27 @@ from riotwatcher import ApiError
 
 
 
-def get_match_json(region, game_id, lol_watcher):
-    try:
-        return lol_watcher.match.by_id(region, game_id)
-    except ApiError as err:
-        if err.response.status_code == 429:
-            print('We should retry in {} seconds.'.format(err.headers['Retry-After']))
-        elif err.response.status_code == 404:
-            print('Match not found for game ID: {}'.format(game_id))
-        elif err.response.status_code == 504 or err.response.status_code == 503 or err.response.status_code == 500:
-            # 504 happens randomly, wait a couple seconds then try again
-            time.sleep(5)
-            return get_match_json(region, game_id, lol_watcher)
-        else:
-            raise
+def get_match_json(region, game_id, lol_watcher, max_retries=5):
+    retries = 0
+
+    while retries <= max_retries:
+        try:
+            return lol_watcher.match.by_id(region, game_id)
+        except ApiError as err:
+            if err.response.status_code == 429:
+                retry_after = int(err.response.headers.get('Retry-AFter', 1))
+                print(f'We should retry in {retry_after} seconds...')
+                time.sleep(retry_after)
+            elif err.response.status_code == 404:
+                print('Match not found for game ID: {}'.format(game_id))
+                return None
+            elif err.response.status_code == 504 or err.response.status_code == 503 or err.response.status_code == 500:
+                # 504 happens randomly, wait a couple seconds then try again
+                print('Error Happened')
+                retries += 1
+                time.sleep(5)
+            else:
+                raise
 
 # parses the participant ID based on the given summoner name
 def get_participant_id(match_json, account_id):
@@ -138,35 +145,43 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
     return data
 
 
-def get_all_summoner_matches(region, account_id, lol_watcher):
+def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
     # maximum range of indices for match lists can only be 100
     index = 0
-    for n in range(1):
-        #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
-        try:
-            response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=50)
-        except ApiError as err:
-            if err.response.status_code == 429:
-                print('API Rate limit reached')
-                time.sleep(5)
-                continue
-            elif err.response.status_code == 404:
-                print('No matches found for Account ID: {}'.format(account_id))
-                return None
-            elif err.response.status_code == 403:
-                print('Refresh your API Key')
-            else:
-                raise
 
-        if len(response) == 0:
-            break
+    retries = 0
+    while retries <= max_retries:
+        for n in range(1):
+            #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
+            try:
+                response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=50)
+            except ApiError as err:
+                if err.response.status_code == 429:
+                    print('API Rate limit reached')
+                    time.sleep(5)
+                    continue
+                elif err.response.status_code == 404:
+                    print('No matches found for Account ID: {}'.format(account_id))
+                    return None
+                elif err.response.status_code == 403:
+                    print('Refresh your API Key')
+                elif err.response.status_code == 504 or err.response.status_code == 503 or err.response.status_code == 500:
+                    # 504 happens randomly, wait a couple seconds then try again
+                    print('Error Happened in Get_All_Summoner_Matches.')
+                    retries += 1
+                    time.sleep(5)
+                else:
+                    raise
 
-        if len(response) == 100:
-            response
-            index += 100
+                if len(response) == 0:
+                    break
 
-        #print('Found', len(response), 'to add for Account ID:', account_id)
-        return response
+                if len(response) == 100:
+                    response
+                    index += 100
+
+                #print('Found', len(response), 'to add for Account ID:', account_id)
+                return response
 
 
 def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
