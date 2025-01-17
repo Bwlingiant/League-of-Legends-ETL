@@ -2,6 +2,7 @@ import constants
 import psycopg
 import polars as pl
 import gspread
+import time
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
 API_KEY = constants.API_KEY_SERVICE
@@ -60,14 +61,26 @@ df = df.with_columns(
         .otherwise((pl.col('kills')+pl.col('assists'))/pl.col('deaths'))
         .alias("KDA"),
         (pl.col('gold_earned') / (pl.col('game_duration')/60)).alias('Gold Per Minute'),
-        ((pl.col('minions_killed') + pl.col('neutral_monsters_killed'))/ (pl.col('game_duration')/60)).alias('CS Per Minute')
+        ((pl.col('minions_killed') + pl.col('neutral_monsters_killed'))/ (pl.col('game_duration')/60)).alias('CS Per Minute'),
+        pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
+        .then(pl.lit('YRDEN'))
+        .otherwise(pl.lit("Other"))
+        .alias('Yrden Flag')
         ]
     )
 
                     #   pl.when(pl.col('teamid') ==100).then("Blue").otherwise("Red").alias("teamid_calc")
 # print(df["win"].unique())
 
-df = df.select([pl.col('teamid'), pl.col('riot_id'), pl.col('champion_name'), pl.col('lane'), pl.col('win'), pl.col('kills'), pl.col('deaths'), pl.col('assists'), pl.col('KDA'),
+df = df.select([pl.col('teamid'), pl.col('Yrden Flag'), pl.col('riot_id'), pl.col('champion_name'), pl.col('lane'), pl.col('win'), pl.col('kills'), pl.col('deaths'), pl.col('assists'), pl.col('KDA'),
                 pl.col('game_duration'), pl.col('minions_killed'), pl.col('neutral_monsters_killed'), pl.col('CS Per Minute'), pl.col('gold_earned'), pl.col('Gold Per Minute'),
                 pl.col('champion_damage'), pl.col('objective_damage'), pl.col('damage_healed'), pl.col('vision_score'), pl.col('summoner1_id'), pl.col('summoner1_casts'),
                 pl.col('summoner2_id'), pl.col('summoner2_casts'),
@@ -97,5 +110,22 @@ sh = gc.open_by_key(spreadsheet_id)
 worksheet = sh.worksheet(sheet_name)
 
 worksheet.clear()
-worksheet.update(data_list)
+
+current_time = [f"Data updated at {time.ctime()} EST. If any issues exist, please message me on Discord."]
+
+worksheet.insert_row(current_time)
+worksheet.update(data_list, range_name='A2') 
 # CODE TO ADD DATA TO GOOGLE SHEET END
+
+formats = [
+    {
+        "range": "A3:BF1000",
+        "format": {
+            "textFormat": {
+                "bold": False
+            },
+        },
+    },
+]
+
+worksheet.batch_format(formats)
