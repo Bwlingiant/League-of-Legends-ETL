@@ -25,7 +25,6 @@ WHERE game_id in
 (select game_id
 from "yrden".lol_game_data
 where 1=1
--- and riot_id in ('YDN Rock Coaches', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue')
 and queue_id in (440, 700)
 group by game_id
 having count(game_id) = 10)
@@ -98,34 +97,38 @@ df = df.select([pl.col('teamid'), pl.col('Yrden Flag'), pl.col('riot_id'), pl.co
 
 
 # CODE TO ADD DATA TO GOOGLE SHEET START
-spreadsheet_id = '1-evQTBBNkjEfL-oEDfdGneVjw_2AiC8puDiW7xs-XLc'
-sheet_name = 'API Stats'
+#
+# First spreadsheet is for Yrden group to analyze. Second spreadsheet is for me to import into Tableau a bit cleaner. 
+spreadsheet_ids = ['1-evQTBBNkjEfL-oEDfdGneVjw_2AiC8puDiW7xs-XLc', '1tkENz6zKs9Q0-Dd771t0Or-fmL-uwOiGnU0tOxvvWIg']
+for spreadsheet_id in spreadsheet_ids:
+    sheet_name = 'API Stats'
+    gc = gspread.service_account(filename='mercurial-song-447620-s8-68e9aa5a21f0.json')
+    data_list = [df.columns] + df.to_numpy().tolist()
+    sh = gc.open_by_key(spreadsheet_id)
+    if spreadsheet_id == '1-evQTBBNkjEfL-oEDfdGneVjw_2AiC8puDiW7xs-XLc':
+        sh_range = 'A2'
+        format_range = "A3:BF1000"
+    else:
+        sh_range = 'A1'
+        format_range = "A2:BF1000"
+    worksheet = sh.worksheet(sheet_name)
+    worksheet.clear()
 
-gc = gspread.service_account(filename='mercurial-song-447620-s8-68e9aa5a21f0.json')
+    current_time = [f"Data updated at {time.ctime()} EST. If any issues exist, please message Bwlingiant on Discord."]
 
-data_list = [df.columns] + df.to_numpy().tolist()
+    worksheet.insert_row(current_time)
+    worksheet.update(data_list, range_name=sh_range)
+    # CODE TO ADD DATA TO GOOGLE SHEET END
 
-sh = gc.open_by_key(spreadsheet_id)
-
-worksheet = sh.worksheet(sheet_name)
-
-worksheet.clear()
-
-current_time = [f"Data updated at {time.ctime()} EST. If any issues exist, please message me on Discord."]
-
-worksheet.insert_row(current_time)
-worksheet.update(data_list, range_name='A2') 
-# CODE TO ADD DATA TO GOOGLE SHEET END
-
-formats = [
-    {
-        "range": "A3:BF1000",
-        "format": {
-            "textFormat": {
-                "bold": False
+    formats = [
+        {
+            "range": format_range,
+            "format": {
+                "textFormat": {
+                    "bold": False
+                },
             },
         },
-    },
-]
+    ]
 
-worksheet.batch_format(formats)
+    worksheet.batch_format(formats)

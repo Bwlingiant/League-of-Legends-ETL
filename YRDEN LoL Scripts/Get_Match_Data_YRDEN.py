@@ -25,8 +25,10 @@ start_time = time.time()
 
 if __name__ == '__main__':
     # This will be used when new summoners are added to the database. Otherwise it is not needed.
-    update_people.update_db_summoner_puuids(lol_region, riot_watcher)
-    update_people.update_summoner_ids(lol_region, lol_watcher)
+    
+    # update_people.update_db_summoner_puuids(lol_region, riot_watcher)
+    # update_people.update_summoner_ids(lol_region, lol_watcher)
+
     #Create Staging Game Table
     cur.execute(yrden_sql_queries.drop_gamedata_staging)
     cur.execute(yrden_sql_queries.create_gamedata_staging)
