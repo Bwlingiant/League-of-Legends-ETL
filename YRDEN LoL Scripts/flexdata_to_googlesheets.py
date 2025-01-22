@@ -47,7 +47,7 @@ print('Connection closed.')
 # print(df.schema)
 # print(df['teamid'])
 
-# print(df)
+print(df.schema)
 
 df = df.with_columns(
         [pl.when(pl.col('win')==True)
@@ -72,7 +72,19 @@ df = df.with_columns(
         .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
         .then(pl.lit('YRDEN'))
         .otherwise(pl.lit("Other"))
-        .alias('Yrden Flag')
+        .alias('Yrden Flag'),
+        pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
+        .then(pl.lit('TOP'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
+        .then(pl.lit('JUNGLE'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
+        .then(pl.lit('MIDDLE'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
+        .then(pl.lit('BOTTOM'))
+        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
+        .then(pl.lit('UTILITY'))
+        .otherwise(pl.col('lane'))
+        .alias('lane')
         ]
     )
 

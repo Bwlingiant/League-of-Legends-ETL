@@ -12,7 +12,7 @@ def get_match_json(region, game_id, lol_watcher, max_retries=5):
             return lol_watcher.match.by_id(region, game_id)
         except ApiError as err:
             if err.response.status_code == 429:
-                retry_after = int(err.response.headers.get('Retry-AFter', 1))
+                retry_after = int(err.response.headers.get('Retry-After', 1))
                 print(f'We should retry in {retry_after} seconds...')
                 time.sleep(retry_after)
             elif err.response.status_code == 404:
@@ -157,8 +157,9 @@ def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
                 response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=50)
             except ApiError as err:
                 if err.response.status_code == 429:
-                    print('API Rate limit reached')
-                    time.sleep(5)
+                    retry_after = int(err.response.headers.get('Retry-After', 1))
+                    print(f'429 error in get_all_summoner_matches. We should retry in {retry_after} seconds...')
+                    time.sleep(retry_after)
                     continue
                 elif err.response.status_code == 404:
                     print('No matches found for Account ID: {}'.format(account_id))
@@ -167,8 +168,9 @@ def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
                     print('Refresh your API Key')
                 elif err.response.status_code == 504 or err.response.status_code == 503 or err.response.status_code == 500:
                     # 504 happens randomly, wait a couple seconds then try again
-                    print('Error Happened in Get_All_Summoner_Matches.')
+                    print('500 Error Happened in Get_All_Summoner_Matches.')
                     retries += 1
+                    print(retries)
                     time.sleep(5)
                 else:
                     raise
