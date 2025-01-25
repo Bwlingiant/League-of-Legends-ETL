@@ -39,6 +39,7 @@ fiveman_flex_query = '''SELECT GAME_ID FROM "yrden".lol_game_data
 cur.execute(fiveman_flex_query)
 game_ids = cur.fetchall()
 
+print(game_ids)
 # for game in game_ids:
 #     print(game[0])
 

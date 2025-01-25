@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # cur.execute('''select distinct RIOT_ID, RIOT_PUUID FROM "yrden".people WHERE RIOT_ID = 'Advil Honeyfruit'; ''')
     result = cur.fetchall()
     print(f"We have started committing games.")
-    lol.commit_new_games(conn, result, lol_region, lol_watcher)
+    lol.commit_new_games(conn, result, lol_region, lol_watcher=lol_watcher)
 
 
     cur.execute('''SELECT riot_puuid FROM "yrden".people WHERE riot_puuid is NOT NULL AND "YRDEN_FLAG" = True ORDER BY RIOT_ID;''')
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     for name in account_results:
         account_id = lol_watcher.summoner.by_puuid(lol_region, name)['puuid']
         account_dict.update({'puuid' : account_id})
-        lol.update_lol_game_data(conn, account_dict, lol_watcher)
+        lol.update_lol_game_data(conn, account_dict, lol_watcher=lol_watcher)
 
     cur.execute('''DELETE FROM "yrden".lol_game_data WHERE WIN IS NULL;''')
     conn.commit()

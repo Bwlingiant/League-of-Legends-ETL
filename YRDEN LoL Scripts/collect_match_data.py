@@ -1,5 +1,6 @@
 import time
 import yrden_sql_queries
+import psycopg
 from riotwatcher import ApiError
 
 
@@ -147,12 +148,11 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
 
 def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
     # maximum range of indices for match lists can only be 100
-    index = 0
-
+    # print(account_id)
     retries = 0
-    while retries <= max_retries:
+    if retries <= max_retries:
         for n in range(1):
-            #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
+        #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
             try:
                 response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=50)
             except ApiError as err:
@@ -175,23 +175,22 @@ def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
                 else:
                     raise
 
-                if len(response) == 0:
-                    break
-
-                if len(response) == 100:
-                    response
-                    index += 100
-
-                #print('Found', len(response), 'to add for Account ID:', account_id)
+            #print('Found', len(response), 'to add for Account ID:', account_id)
+            try:
+                response
+            except UnboundLocalError:
+                return None
+            else:
                 return response
 
 
 def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
     with conn.cursor() as curs:
         for riot_id, riot_puuid in riot_ids:
-                        
+            # print(riot_id)
             vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
             if vals is None:
+                print(f'No matches found for {riot_id}.')
                 continue
             else:
                 new_vals = {}
