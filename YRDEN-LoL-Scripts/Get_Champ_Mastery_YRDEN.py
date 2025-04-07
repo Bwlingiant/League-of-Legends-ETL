@@ -138,7 +138,8 @@ def commit_champ_mastery(conn, summoner_name):
             curs.execute('''SELECT DISTINCT CHAMPIONID FROM "yrden".LOL_CHAMP_MASTERY WHERE PUUID = %s;''', riot_puuid)
             print(curs.rowcount, " masteries added for ", riot_id[0])
 
-commit_champ_mastery(conn, summoner_ids_list)
+if __name__ == "__main__":
+    commit_champ_mastery(conn, summoner_ids_list)
 
-conn.close()
-print('The database connection has closed.')
+    conn.close()
+    print('The database connection has closed.')

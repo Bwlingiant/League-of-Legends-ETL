@@ -34,14 +34,14 @@ if __name__ == '__main__':
     cur.execute(yrden_sql_queries.create_gamedata_staging)
     # conn.commit()
 
-    cur.execute('''select distinct RIOT_ID, RIOT_PUUID FROM "yrden".people WHERE RIOT_ID is NOT NULL AND "YRDEN_FLAG" = True ORDER BY RIOT_ID; ''')
+    cur.execute('''select distinct RIOT_ID, RIOT_PUUID FROM "yrden".people WHERE RIOT_ID is NOT NULL AND "YRDEN_FLAG" = True AND riot_id = 'potpourriformed' ORDER BY RIOT_ID; ''')
     # cur.execute('''select distinct RIOT_ID, RIOT_PUUID FROM "yrden".people WHERE RIOT_ID = 'Advil Honeyfruit'; ''')
     result = cur.fetchall()
     print(f"We have started committing games.")
     lol.commit_new_games(conn, result, lol_region, lol_watcher=lol_watcher)
 
 
-    cur.execute('''SELECT riot_puuid FROM "yrden".people WHERE riot_puuid is NOT NULL AND "YRDEN_FLAG" = True ORDER BY RIOT_ID;''')
+    cur.execute('''SELECT riot_puuid FROM "yrden".people WHERE riot_puuid is NOT NULL AND "YRDEN_FLAG" = True AND riot_id = 'potpourriformed' ORDER BY RIOT_ID;''')
     # cur.execute('''SELECT riot_puuid FROM "yrden".people WHERE riot_id = 'Advil Honeyfruit'; ''')
     account_ids_sql = cur.fetchall()
     account_results = [account_ids_sql[0] for account_ids_sql in account_ids_sql]

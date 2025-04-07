@@ -154,7 +154,7 @@ def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
         for n in range(1):
         #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
             try:
-                response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=50)
+                response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=0, count=100)
             except ApiError as err:
                 if err.response.status_code == 429:
                     retry_after = int(err.response.headers.get('Retry-After', 1))

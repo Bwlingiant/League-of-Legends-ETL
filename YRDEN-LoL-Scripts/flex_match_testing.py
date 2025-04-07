@@ -24,7 +24,7 @@ cur = conn.cursor()
 print('Connection Established')
 
 fiveman_flex_query = '''SELECT GAME_ID FROM "yrden".lol_game_data
-                        WHERE RIOT_ID IN ('YDN Rock Coaches', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue')
+                        WHERE RIOT_ID IN ('YDN Rock Coaches', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue', 'potpourriformed')
                         AND QUEUE_ID IN (440,700)
 						AND GAME_ID NOT IN 
                             (select game_id
@@ -66,13 +66,13 @@ with conn.cursor() as curs:
                 if id in (puuid_list):
                     continue
                 riot_id = riot_watcher.account.by_puuid('AMERICAS', id)
-                print(riot_id)
+                # print(riot_id)
                 time.sleep(1)
                 add_player_puuid(riot_id)
 
             for id in id_list:
                 test = lol.collect_match_data('NA1', id, game[0], lol_watcher)
-                print(test)
+                # print(test)
                 time.sleep(3)
                 insert_query = '''INSERT INTO "yrden".lol_game_data (riot_puuid, game_duration, game_id,
                         game_mode, queue_id, game_patch, champion_id, champion_name, lane, teamid, win,

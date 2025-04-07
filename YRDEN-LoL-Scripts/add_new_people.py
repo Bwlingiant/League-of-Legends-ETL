@@ -23,9 +23,10 @@ conn = psycopg.connect(db_connection)
 
 cur = conn.cursor()
 if __name__ == '__main__':
-    cur.execute('''SELECT riot_id, riot_key FROM "yrden".people WHERE summoner_id is null;''')
+    cur.execute('''SELECT riot_id, riot_key FROM "yrden".people WHERE riot_puuid is null;''')
     name_result = cur.fetchall()
     for name in name_result:
+        print(name)
         riot_puuid = riot_watcher.account.by_riot_id(game_name=name[0], tag_line=name[1], region='AMERICAS')
         print(riot_puuid['puuid'])
         update_query = f'''UPDATE "yrden".people SET riot_puuid = '{riot_puuid['puuid']}' WHERE riot_id ='{name[0]}';'''

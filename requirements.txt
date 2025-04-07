@@ -1,0 +1,10 @@
+gspread==6.2.0
+pandas==2.2.3
+polars==1.26.0
+psycopg==3.1.14
+pytest==8.3.5
+Requests==2.32.3
+setuptools==76.0.0
+SQLAlchemy==2.0.36
+wget==3.2
+riotwatcher
