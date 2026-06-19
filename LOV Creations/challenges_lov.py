@@ -20,7 +20,7 @@ db_connection = f'dbname=yrden user=postgres password={db_pass} host={db_ip}'
 
 conn = psycopg.connect(db_connection)
 curs = conn.cursor()
-patch_no = '14.1.1' # input('Enter the new patch number:')
+# patch_no = '14.1.1' # input('Enter the new patch number:')
 
 #Thresholds key houses information on amount of points needed for each breakpoint of the tiers.
 

@@ -1,13 +1,16 @@
-import constants
+import os
 import psycopg
 import yrden_sql_queries
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
-db_pass = constants.db_password
-db_ip = constants.db_ip
-
-db_connection = f'dbname = yrden user=postgres password={db_pass} host={db_ip}'
-
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+# print(db_connection)
 conn = psycopg.connect(db_connection)
 
 cur = conn.cursor()

@@ -1,20 +1,23 @@
-import constants
+import os
 import psycopg
 import polars as pl
 import gspread
 import time
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
-API_KEY = constants.API_KEY_SERVICE
+API_KEY = os.environ['API_KEY_SERVICE']
 lol_watcher = LolWatcher(API_KEY)
 riot_watcher = RiotWatcher(API_KEY)
 lol_region = 'na1'
 
-db_pass = constants.db_password
-db_ip = constants.db_ip
-
-db_connection = f'dbname = yrden user=postgres password={db_pass} host={db_ip}'
-
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+# print(db_connection)
 conn = psycopg.connect(db_connection)
 
 cur = conn.cursor()
@@ -61,30 +64,34 @@ df = df.with_columns(
         .alias("KDA"),
         (pl.col('gold_earned') / (pl.col('game_duration')/60)).alias('Gold Per Minute'),
         ((pl.col('minions_killed') + pl.col('neutral_monsters_killed'))/ (pl.col('game_duration')/60)).alias('CS Per Minute'),
-        pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
-        .then(pl.lit('YRDEN'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
-        .then(pl.lit('YRDEN'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
-        .then(pl.lit('YRDEN'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
-        .then(pl.lit('YRDEN'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
-        .then(pl.lit('YRDEN'))
-        .otherwise(pl.lit("Other"))
-        .alias('Yrden Flag'),
-        pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
-        .then(pl.lit('TOP'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
-        .then(pl.lit('JUNGLE'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
-        .then(pl.lit('MIDDLE'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
-        .then(pl.lit('BOTTOM'))
-        .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
-        .then(pl.lit('UTILITY'))
-        .otherwise(pl.col('lane'))
-        .alias('lane')
+        # TODO: Replace with environment variable once PUUIDs are recovered from lost DB.
+        # Set YRDEN_PUUIDS as a comma-separated env var and parse with:
+        #   yrden_puuids = os.environ['YRDEN_PUUIDS'].split(',')
+        # Then replace constants.yrden_lol_team_puuids[n] with yrden_puuids[n] below.
+        # pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
+        # .then(pl.lit('YRDEN'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
+        # .then(pl.lit('YRDEN'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
+        # .then(pl.lit('YRDEN'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
+        # .then(pl.lit('YRDEN'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
+        # .then(pl.lit('YRDEN'))
+        # .otherwise(pl.lit("Other"))
+        # .alias('Yrden Flag'),
+        # pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
+        # .then(pl.lit('TOP'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
+        # .then(pl.lit('JUNGLE'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
+        # .then(pl.lit('MIDDLE'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
+        # .then(pl.lit('BOTTOM'))
+        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
+        # .then(pl.lit('UTILITY'))
+        # .otherwise(pl.col('lane'))
+        # .alias('lane')
         ]
     )
 

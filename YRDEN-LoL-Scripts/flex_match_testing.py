@@ -1,6 +1,6 @@
+import os
 import sys
 import time
-import constants
 import psycopg
 import yrden_sql_queries
 import collect_match_data as lol
@@ -8,17 +8,21 @@ from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-API_KEY = constants.API_KEY_SERVICE
+API_KEY = os.environ['API_KEY_SERVICE']
+# print(API_KEY)
 lol_watcher = LolWatcher(API_KEY)
 riot_watcher = RiotWatcher(API_KEY)
 lol_region = 'na1'
 
-db_pass = constants.db_password
-db_ip = constants.db_ip
-
-db_connection = f'dbname = yrden user=postgres password={db_pass} host={db_ip}'
-
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
 conn = psycopg.connect(db_connection)
+# print(db_connection)
 
 cur = conn.cursor()
 print('Connection Established')

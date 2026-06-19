@@ -1,4 +1,4 @@
-import constants
+import os
 import psycopg
 import yrden_sql_queries
 from datetime import datetime
@@ -9,16 +9,19 @@ from riotwatcher import LolWatcher, ApiError, RiotWatcher
 API Error needs to be used in this to catch important errors during API calls.
 '''
 
-API_KEY = constants.API_KEY_SERVICE
+API_KEY = os.environ['API_KEY_SERVICE']
 lol_watcher = LolWatcher(API_KEY)
 riot_watcher = RiotWatcher(API_KEY)
 lol_region = 'na1'
 
-db_pass = constants.db_password
-db_ip = constants.db_ip
-
-db_connection = f'dbname=yrden user=postgres password={db_pass} host={db_ip}'
-
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+# print(db_connection)
 conn = psycopg.connect(db_connection)
 cur = conn.cursor()
 
