@@ -43,13 +43,4 @@ if __name__ == '__main__':
         cur.execute(update_query)
         conn.commit()
 
-    cur.execute('''SELECT riot_puuid FROM "yrden".people WHERE summoner_id is null;''')
-    puuid_result = cur.fetchall()
-    for riot_puuid in puuid_result:
-        # break
-        summ_id = lol_watcher.summoner.by_puuid('NA1', riot_puuid)
-        print(summ_id['id'])
-        update_query = f'''UPDATE "yrden".people SET summoner_id = '{summ_id['id']}' WHERE riot_puuid ='{riot_puuid[0]}';'''
-        print(update_query)
-        cur.execute(update_query)
-        conn.commit()
+conn.close()
