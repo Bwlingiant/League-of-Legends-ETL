@@ -22,9 +22,15 @@ db_connection = (
     f"port={os.environ['PGPORT']}"
 )
 # print(db_connection)
-conn = psycopg.connect(db_connection)
 
-cur = conn.cursor()
+try:
+    conn = psycopg.connect(db_connection)
+    cur = conn.cursor()
+    cur.execute('SELECT 1')
+    print('DB connection successful.')
+except Exception as e:
+    print(f'DB connection failed: {e}')
+    raise
 if __name__ == '__main__':
     cur.execute('''SELECT riot_id, riot_key FROM "yrden".people WHERE riot_puuid is null;''')
     name_result = cur.fetchall()
