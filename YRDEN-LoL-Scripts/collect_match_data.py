@@ -182,13 +182,56 @@ def get_all_summoner_matches(region, account_id, lol_watcher, max_retries=5):
                 return None
             else:
                 return response
+def get_all_new_summoner_matches(region, account_id, lol_watcher, max_retries=5):
+    # maximum range of indices for match lists can only be 100
+    # print(account_id)
+    retries = 0
+    start_index = 0
+    for n in range(10):
+        if retries <= max_retries:
+            for n in range(1):
+            #Start can go up to 900. Count can go to max 100. Can get last 1000 games. Must increment the start index in order to do so.
+                try:
+                    response = lol_watcher.match.matchlist_by_puuid(region, account_id, start=start_index, count=100)
+                except ApiError as err:
+                    if err.response.status_code == 429:
+                        retry_after = int(err.response.headers.get('Retry-After', 1))
+                        print(f'429 error in get_all_summoner_matches. We should retry in {retry_after} seconds...')
+                        time.sleep(retry_after)
+                        continue
+                    elif err.response.status_code == 404:
+                        print('No matches found for Account ID: {}'.format(account_id))
+                        return None
+                    elif err.response.status_code == 403:
+                        print('Refresh your API Key')
+                    elif err.response.status_code == 504 or err.response.status_code == 503 or err.response.status_code == 500:
+                        # 504 happens randomly, wait a couple seconds then try again
+                        print('500 Error Happened in Get_All_Summoner_Matches.')
+                        retries += 1
+                        print(retries)
+                        time.sleep(5)
+                    else:
+                        raise
 
+                start_index += 100
+                #print('Found', len(response), 'to add for Account ID:', account_id)
+                try:
+                    response
+                except UnboundLocalError:
+                    return None
+                else:
+                    return response
 
 def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
     with conn.cursor() as curs:
+        curs.execute('''SELECT DISTINCT RIOT_PUUID FROM "yrden".lol_game_data WHERE WIN is null;''')
+        missing_games = curs.fetchall()
         for riot_id, riot_puuid in riot_ids:
             # print(riot_id)
-            vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
+            if riot_puuid in missing_games:
+                vals = get_all_new_summoner_matches(lol_region, riot_puuid, lol_watcher)
+            else:
+                vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
             if vals is None:
                 print(f'No matches found for {riot_id}.')
                 continue
