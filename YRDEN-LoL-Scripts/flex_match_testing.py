@@ -28,13 +28,13 @@ cur = conn.cursor()
 print('Connection Established')
 
 fiveman_flex_query = '''SELECT GAME_ID FROM "yrden".lol_game_data
-                        WHERE RIOT_ID IN ('YDN Rock Coaches', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue', 'potpourriformed')
+                        WHERE RIOT_ID IN ('Huvi', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue', 'potpourriformed')
                         AND QUEUE_ID IN (440,700)
 						AND GAME_ID NOT IN 
                             (select game_id
                             from "yrden".lol_game_data
                             where 1=1
-                            -- and riot_id in ('YDN Rock Coaches', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue')
+                            -- and riot_id in ('Huvi', 'Triggerman', 'wyzrdsnvrdie', 'Hypocritus', 'Blue')
                             and queue_id in (440, 700)
                             group by game_id
                             having count(game_id) = 10)
