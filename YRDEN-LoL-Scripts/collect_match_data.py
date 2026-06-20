@@ -232,6 +232,7 @@ def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
                 vals = get_all_new_summoner_matches(lol_region, riot_puuid, lol_watcher)
             else:
                 vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
+                
             if vals is None:
                 print(f'No matches found for {riot_id}.')
                 continue
