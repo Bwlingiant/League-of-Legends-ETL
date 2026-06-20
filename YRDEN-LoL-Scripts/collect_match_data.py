@@ -230,7 +230,8 @@ def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
                      ON p1.RIOT_PUUID = d1.RIOT_PUUID
                      WHERE WIN IS NULL
                      ;''')
-        missing_games = curs.fetchall()
+        missing_games_res = curs.fetchall()
+        missing_games = [missing_games_res[0] for missing_games_res in missing_games_res]
         print(missing_games)
         for riot_id, riot_puuid in riot_ids:
             print(riot_id)
