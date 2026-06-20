@@ -214,6 +214,7 @@ def get_all_new_summoner_matches(region, account_id, lol_watcher, max_retries=5)
                         raise
 
                 start_index += 100
+                print(start_index)
                 #print('Found', len(response), 'to add for Account ID:', account_id)
                 try:
                     response
@@ -230,9 +231,11 @@ def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
                      WHERE WIN IS NULL
                      ;''')
         missing_games = curs.fetchall()
+        print(missing_games)
         for riot_id, riot_puuid in riot_ids:
             print(riot_id)
             if riot_puuid in missing_games:
+                print('Inside of missing games list')
                 vals = get_all_new_summoner_matches(lol_region, riot_puuid, lol_watcher)
             else:
                 vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
