@@ -227,12 +227,12 @@ def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
         curs.execute('''SELECT DISTINCT RIOT_PUUID FROM "yrden".lol_game_data WHERE WIN is null;''')
         missing_games = curs.fetchall()
         for riot_id, riot_puuid in riot_ids:
-            # print(riot_id)
+            print(riot_id)
             if riot_puuid in missing_games:
                 vals = get_all_new_summoner_matches(lol_region, riot_puuid, lol_watcher)
             else:
                 vals = get_all_summoner_matches(lol_region, riot_puuid, lol_watcher)
-                
+
             if vals is None:
                 print(f'No matches found for {riot_id}.')
                 continue
