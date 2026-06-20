@@ -224,7 +224,11 @@ def get_all_new_summoner_matches(region, account_id, lol_watcher, max_retries=5)
 
 def commit_new_games(conn, riot_ids, lol_region, lol_watcher):
     with conn.cursor() as curs:
-        curs.execute('''SELECT DISTINCT RIOT_PUUID FROM "yrden".lol_game_data WHERE WIN is null;''')
+        curs.execute('''SELECT DISTINCT RIOT_PUUID FROM "yrden".people p1
+                     LEFT JOIN "yrden".lol_game_data d1
+                     ON p1.RIOT_PUUID = d1.RIOT_PUUID
+                     WHERE WIN IS NULL
+                     ;''')
         missing_games = curs.fetchall()
         for riot_id, riot_puuid in riot_ids:
             print(riot_id)
