@@ -1,8 +1,10 @@
+import json
 import os
 import psycopg
 import polars as pl
 import gspread
 import time
+from google.oauth2.service_account import Credentials
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
 API_KEY = os.environ['API_KEY_SERVICE']
@@ -113,11 +115,18 @@ df = df.select([pl.col('teamid'), pl.col('Yrden Flag'), pl.col('riot_id'), pl.co
 
 # CODE TO ADD DATA TO GOOGLE SHEET START
 #
-# First spreadsheet is for Yrden group to analyze. Second spreadsheet is for me to import into Tableau a bit cleaner. 
+# First spreadsheet is for Yrden group to analyze. Second spreadsheet is for me to import into Tableau a bit cleaner.
+service_account_info = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
+scopes = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+]
+creds = Credentials.from_service_account_info(service_account_info, scopes=scopes)
+gc = gspread.Client(auth=creds)
+
 spreadsheet_ids = ['1-evQTBBNkjEfL-oEDfdGneVjw_2AiC8puDiW7xs-XLc', '1tkENz6zKs9Q0-Dd771t0Or-fmL-uwOiGnU0tOxvvWIg']
 for spreadsheet_id in spreadsheet_ids:
     sheet_name = 'API Stats'
-    gc = gspread.service_account(filename='mercurial-song-447620-s8-68e9aa5a21f0.json')
     data_list = [df.columns] + df.to_numpy().tolist()
     sh = gc.open_by_key(spreadsheet_id)
     if spreadsheet_id == '1-evQTBBNkjEfL-oEDfdGneVjw_2AiC8puDiW7xs-XLc':
