@@ -64,34 +64,30 @@ df = df.with_columns(
         .alias("KDA"),
         (pl.col('gold_earned') / (pl.col('game_duration')/60)).alias('Gold Per Minute'),
         ((pl.col('minions_killed') + pl.col('neutral_monsters_killed'))/ (pl.col('game_duration')/60)).alias('CS Per Minute'),
-        # TODO: Replace with environment variable once PUUIDs are recovered from lost DB.
-        # Set YRDEN_PUUIDS as a comma-separated env var and parse with:
-        #   yrden_puuids = os.environ['YRDEN_PUUIDS'].split(',')
-        # Then replace constants.yrden_lol_team_puuids[n] with yrden_puuids[n] below.
-        # pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
-        # .then(pl.lit('YRDEN'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
-        # .then(pl.lit('YRDEN'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
-        # .then(pl.lit('YRDEN'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
-        # .then(pl.lit('YRDEN'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
-        # .then(pl.lit('YRDEN'))
-        # .otherwise(pl.lit("Other"))
-        # .alias('Yrden Flag'),
-        # pl.when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[0])
-        # .then(pl.lit('TOP'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[1])
-        # .then(pl.lit('JUNGLE'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[2])
-        # .then(pl.lit('MIDDLE'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[3])
-        # .then(pl.lit('BOTTOM'))
-        # .when(pl.col('riot_puuid') == constants.yrden_lol_team_puuids[4])
-        # .then(pl.lit('UTILITY'))
-        # .otherwise(pl.col('lane'))
-        # .alias('lane')
+        pl.when(pl.col('riot_puuid') == os.environ['TRIGGER_ID'])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == os.environ['VIET_ID'])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == os.environ['BLUE_ID'])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == os.environ['HYPO_ID'])
+        .then(pl.lit('YRDEN'))
+        .when(pl.col('riot_puuid') == os.environ['WYZ_ID'])
+        .then(pl.lit('YRDEN'))
+        .otherwise(pl.lit("Other"))
+        .alias('Yrden Flag'),
+        pl.when(pl.col('riot_puuid') == os.environ['TRIGGER_ID'])
+        .then(pl.lit('JUNGLE'))
+        .when(pl.col('riot_puuid') == os.environ['VIET_ID'])
+        .then(pl.lit('BOTTOM'))
+        .when(pl.col('riot_puuid') == os.environ['BLUE_ID'])
+        .then(pl.lit('MIDDLE'))
+        .when(pl.col('riot_puuid') == os.environ['HYPO_ID'])
+        .then(pl.lit('TOP'))
+        .when(pl.col('riot_puuid') == os.environ['WYZ_ID'])
+        .then(pl.lit('UTILITY'))
+        .otherwise(pl.col('lane'))
+        .alias('lane')
         ]
     )
 

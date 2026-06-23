@@ -121,7 +121,7 @@ SET riot_id = ppl.riot_id
 FROM "yrden".people ppl
 WHERE lgd.riot_puuid = ppl.riot_puuid
 AND lgd.RIOT_ID IS NULL
-;'''
+;''' 
 
 cur.execute(update_new_query)
 
