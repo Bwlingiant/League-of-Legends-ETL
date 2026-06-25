@@ -143,7 +143,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
                  'game_id' : game_id,
                  'puuid' : participant_json['puuid']
     })
-    
+    print(data)
     return data
 
 
