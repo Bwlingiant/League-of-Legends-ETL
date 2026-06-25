@@ -144,7 +144,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
                  'game_id' : game_id,
                  'puuid' : participant_json['puuid']
     })
-    print(data)
+    # print(data)
     return data
 
 
@@ -363,7 +363,7 @@ def update_lol_game_data(conn, account_res, lol_watcher):
                         data['puuid']  
                             )
                 # Print the data dictionary
-                print(values)
+                # print(values)
                 curs.execute(yrden_sql_queries.update_game_data, values)
                 #print(f"game {i} is now in for {riot_id[0][0]}")
             except ApiError as err:
