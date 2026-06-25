@@ -46,7 +46,7 @@ def commit_champ_mastery(conn, summoner_name):
 
         for i, riot_puuid in enumerate(summoner_name):
             
-            api_url = f"https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{riot_puuid}?api_key={constants.API_KEY_SERVICE}"
+            api_url = f"https://na1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{riot_puuid}?api_key={os.environ['API_KEY_SERVICE']}"
             resp = requests.get(api_url)
             vals = resp.json()
             # pprint.pp(vals)
