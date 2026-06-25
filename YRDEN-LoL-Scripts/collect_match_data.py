@@ -84,6 +84,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
     secondary_runes = participant_json['perks']['styles'][1]['selections']
 
     data.update({'gameMode' : match_json['info']['gameMode'],
+                 'creation' : match_json['info']['gameCreation'],
         'queueId' : match_json['info']['queueId'],
         'gameVersion' : match_json['info']['gameVersion'],
         'championId': participant_json['championId'],
@@ -301,6 +302,7 @@ def update_lol_game_data(conn, account_res, lol_watcher):
                 #Used for debugging and to find types of the data dictionary
                 
                 values = (data['duration'],
+                          data['creation'],
                             data['gameMode'],
                         data['queueId'],
                         data['gameVersion'],
