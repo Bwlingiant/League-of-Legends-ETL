@@ -78,7 +78,7 @@ with conn.cursor() as curs:
                 test = lol.collect_match_data('NA1', id, game[0], lol_watcher)
                 # print(test)
                 time.sleep(3)
-                insert_query = '''INSERT INTO "yrden".lol_game_data (riot_puuid, game_duration, game_id,
+                insert_query = '''INSERT INTO "yrden".lol_game_data (riot_puuid, game_duration, game_creation, game_id,
                         game_mode, queue_id, game_patch, champion_id, champion_name, lane, teamid, win,
                         kills, deaths, assists, double_kills, triple_kills, quadra_kills,  penta_kills,
                         gold_earned, champion_damage, objective_damage, damage_healed, vision_score,  minions_killed,
@@ -87,9 +87,9 @@ with conn.cursor() as curs:
                         primary_rune1_var3, primary_rune2_var1, primary_rune2_var2, primary_rune2_var3, primary_rune3_var1,
                         primary_rune3_var2, primary_rune3_var3, secondary_rune_code1, secondary_rune_code2, secondary_rune1_var1,
                         secondary_rune1_var2, secondary_rune1_var3, secondary_rune2_var1, secondary_rune2_var2, secondary_rune2_var3,
-                        largest_critical_strike, nexus_kills, summoner1_id, summoner1_casts, summoner2_id, summoner2_casts, 
+                        largest_critical_strike, nexus_kills, summoner1_id, summoner1_casts, summoner2_id, summoner2_casts,
                         control_wards_purchased, wards_killed, wards_placed)
-                SELECT %(puuid)s::VARCHAR, %(duration)s, %(game_id)s::VARCHAR,
+                SELECT %(puuid)s::VARCHAR, %(duration)s, %(creation)s, %(game_id)s::VARCHAR,
                         %(gameMode)s, %(queueId)s, %(gameVersion)s, %(championId)s, %(championName)s, %(lane)s, %(teamId)s, %(win)s,
                         %(kills)s, %(deaths)s, %(assists)s, %(doublekills)s, %(triplekills)s, %(quadrakills)s, %(pentakills)s,
                         %(gold_earned)s, %(champion_damage)s, %(objective_damage)s, %(damage_healed)s, %(vision_score)s,  %(minions_killed)s,
@@ -98,7 +98,7 @@ with conn.cursor() as curs:
                         %(primary_rune1_var3)s, %(primary_rune2_var1)s, %(primary_rune2_var2)s, %(primary_rune2_var3)s, %(primary_rune3_var1)s,
                         %(primary_rune3_var2)s, %(primary_rune3_var3)s, %(secondary_rune1)s, %(secondary_rune2)s, %(secondary_rune1_var1)s,
                         %(secondary_rune1_var2)s, %(secondary_rune1_var3)s, %(secondary_rune2_var1)s, %(secondary_rune2_var2)s, %(secondary_rune2_var3)s,
-                        %(largestCriticalStrike)s, %(nexusKills)s, %(summoner1_id)s, %(summoner1_casts)s, %(summoner2_id)s, %(summoner2_casts)s, 
+                        %(largestCriticalStrike)s, %(nexusKills)s, %(summoner1_id)s, %(summoner1_casts)s, %(summoner2_id)s, %(summoner2_casts)s,
                         %(control_wards_purchased)s, %(wardsKilled)s, %(wardsPlaced)s
                         WHERE NOT EXISTS (select 1 from "yrden".lol_game_data WHERE riot_puuid = %(puuid)s AND game_id = %(game_id)s);'''
                 curs.execute(insert_query, test)
