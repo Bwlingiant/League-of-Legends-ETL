@@ -96,7 +96,7 @@ df = df.with_columns(
                     #   pl.when(pl.col('teamid') ==100).then("Blue").otherwise("Red").alias("teamid_calc")
 # print(df["win"].unique())
 
-df = df.select([pl.col('teamid'), pl.col('Yrden Flag'), pl.col('riot_id'), pl.col('champion_name'), pl.col('lane'), pl.col('win'), pl.col('kills'), pl.col('deaths'), pl.col('assists'), pl.col('KDA'),
+df = df.select([pl.col('teamid'), pl.col('game_creation'), pl.col('Yrden Flag'), pl.col('riot_id'), pl.col('champion_name'), pl.col('lane'), pl.col('win'), pl.col('kills'), pl.col('deaths'), pl.col('assists'), pl.col('KDA'),
                 pl.col('game_duration'), pl.col('minions_killed'), pl.col('neutral_monsters_killed'), pl.col('CS Per Minute'), pl.col('gold_earned'), pl.col('Gold Per Minute'),
                 pl.col('champion_damage'), pl.col('objective_damage'), pl.col('damage_healed'), pl.col('vision_score'), pl.col('summoner1_id'), pl.col('summoner1_casts'),
                 pl.col('summoner2_id'), pl.col('summoner2_casts'),
