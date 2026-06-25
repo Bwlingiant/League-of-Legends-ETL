@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timezone
 import yrden_sql_queries
 import psycopg
 from riotwatcher import ApiError
@@ -84,7 +85,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
     secondary_runes = participant_json['perks']['styles'][1]['selections']
 
     data.update({'gameMode' : match_json['info']['gameMode'],
-                 'creation' : match_json['info']['gameCreation'],
+                 'creation' : datetime.fromtimestamp(match_json['info']['gameCreation'] / 1000, tz=timezone.utc).date(),
         'queueId' : match_json['info']['queueId'],
         'gameVersion' : match_json['info']['gameVersion'],
         'championId': participant_json['championId'],
