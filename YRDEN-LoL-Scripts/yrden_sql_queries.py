@@ -9,6 +9,7 @@ get_puuids_yrden = '''SELECT DISTINCT RIOT_PUUID FROM "yrden".PEOPLE WHERE RIOT_
 get_puuids_all = '''SELECT DISTINCT RIOT_PUUID FROM "yrden".PEOPLE WHERE RIOT_PUUID IS NOT NULL;'''
 update_game_data = '''UPDATE "yrden".lol_game_data
                 SET game_duration = %s,
+                    game_creation = %s,
                     game_mode = %s,
                     queue_id = %s,
                     game_patch = %s,

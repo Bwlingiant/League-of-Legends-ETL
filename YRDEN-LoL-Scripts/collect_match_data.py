@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timezone
 import yrden_sql_queries
 import psycopg
 from riotwatcher import ApiError
@@ -84,6 +85,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
     secondary_runes = participant_json['perks']['styles'][1]['selections']
 
     data.update({'gameMode' : match_json['info']['gameMode'],
+                 'creation' : datetime.fromtimestamp(match_json['info']['gameCreation'] / 1000, tz=timezone.utc).date(),
         'queueId' : match_json['info']['queueId'],
         'gameVersion' : match_json['info']['gameVersion'],
         'championId': participant_json['championId'],
@@ -142,7 +144,7 @@ def collect_match_data(region, account_id, game_id, lol_watcher):
                  'game_id' : game_id,
                  'puuid' : participant_json['puuid']
     })
-    
+    # print(data)
     return data
 
 
@@ -301,6 +303,7 @@ def update_lol_game_data(conn, account_res, lol_watcher):
                 #Used for debugging and to find types of the data dictionary
                 
                 values = (data['duration'],
+                          data['creation'],
                             data['gameMode'],
                         data['queueId'],
                         data['gameVersion'],
@@ -360,7 +363,7 @@ def update_lol_game_data(conn, account_res, lol_watcher):
                         data['puuid']  
                             )
                 # Print the data dictionary
-                
+                # print(values)
                 curs.execute(yrden_sql_queries.update_game_data, values)
                 #print(f"game {i} is now in for {riot_id[0][0]}")
             except ApiError as err:
