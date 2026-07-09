@@ -1,15 +1,17 @@
 import os
 import json
 import psycopg
-import constants as con
 import sys
 
-print(os.curdir)
-# print('Fucking work')
-# sys.exit()
 
-# --- Database connection (use env vars or refactor later) ---
-conn = psycopg.connect(con.db_connection)
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+conn = psycopg.connect(db_connection)
 
 
 

@@ -1,18 +1,23 @@
 import os
 import json
 import psycopg
-import constants as con
 import sys
 
-print(os.curdir)
-# print('Fucking work')
-# sys.exit()
 
-# --- Database connection (use env vars or refactor later) ---
-conn = psycopg.connect(con.db_connection)
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+conn = psycopg.connect(db_connection)
 
 
 # --- Champion directory ---
+'''This is not used anymore. Need to delve into how this stuff works again. Can I get the data
+ from the API and utilize that instead? There has to be a better way to do this than by 
+  doing these hardcoded things. '''
 DATA_DIR = '/home/bwlingiant/python_projects/League-of-Legends-ETL/LOV Creations/ddragon_champions'
 
 # --- SQL Insert Query ---

@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import json
 import psycopg
@@ -6,17 +7,19 @@ import constants
 
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
-API_KEY = constants.API_KEY_SERVICE
+API_KEY = os.environ['API_KEY_SERVICE']
 lol_watcher = LolWatcher(API_KEY)
 riot_watcher = RiotWatcher(API_KEY)
 lol_region = 'na1'
 
 
-#Connect to Yrden DB
-#Private args are executed and then deleted for safety
-db_pass = constants.db_password
-db_ip = constants.db_ip
-db_connection = f'dbname = yrden user=postgres password={db_pass} host={db_ip}'
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
 conn = psycopg.connect(db_connection)
 cur = conn.cursor()
 
@@ -42,6 +45,6 @@ for n in summoners:
     print(f"{n} has been added to the LOV.")
 conn.commit()
 conn.close()
-print('Database connection closed.')
+# print('Database connection closed.')
 
     
