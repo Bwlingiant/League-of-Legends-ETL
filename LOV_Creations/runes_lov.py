@@ -28,10 +28,6 @@ DDrunes = DDRegion['summoner']
 runes = lol_watcher.data_dragon.runes_reforged(DDrunes)
 rune_list = runes
 
-for n in range(1):
-    pprint.pp(rune_list)
-
-    break
                                  
 flattened_runes = {}
 
