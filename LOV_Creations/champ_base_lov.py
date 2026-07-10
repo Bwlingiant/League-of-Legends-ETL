@@ -4,14 +4,14 @@ import psycopg
 import sys
 
 
-db_connection = (
-    f"dbname={os.environ['DB']} "
-    f"user={os.environ['POSTGRES_USER']} "
-    f"password={os.environ['POSTGRES_PASSWORD']} "
-    f"host={os.environ['PGHOST']} "
-    f"port={os.environ['PGPORT']}"
-)
-conn = psycopg.connect(db_connection)
+# db_connection = (
+#     f"dbname={os.environ['DB']} "
+#     f"user={os.environ['POSTGRES_USER']} "
+#     f"password={os.environ['POSTGRES_PASSWORD']} "
+#     f"host={os.environ['PGHOST']} "
+#     f"port={os.environ['PGPORT']}"
+# )
+# conn = psycopg.connect(db_connection)
 
 
 # --- Champion directory ---

@@ -1,10 +1,16 @@
 import psycopg
 import os
 import wget
-import constants
 
 
-conn = psycopg.connect(constants.db_connection)
+db_connection = (
+    f"dbname={os.environ['DB']} "
+    f"user={os.environ['POSTGRES_USER']} "
+    f"password={os.environ['POSTGRES_PASSWORD']} "
+    f"host={os.environ['PGHOST']} "
+    f"port={os.environ['PGPORT']}"
+)
+conn = psycopg.connect(db_connection)
 curs = conn.cursor()
 
 print('Connection established.')

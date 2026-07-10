@@ -3,7 +3,6 @@ import os
 import time
 import json
 import psycopg
-import constants
 import pprint
 
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
@@ -28,6 +27,11 @@ DDrunes = DDRegion['summoner']
 # print(DDrunes[0][0])
 runes = lol_watcher.data_dragon.runes_reforged(DDrunes)
 rune_list = runes
+
+for n in range(1):
+    pprint.pp(rune_list)
+
+    break
                                  
 flattened_runes = {}
 
@@ -44,15 +48,13 @@ for style in rune_list:
             }
 
 # pprint.pp(flattened_runes)
-'''INSERT INTO "lollov".summoner_spells
-    (spell_name, spell_id, modes)
-    VALUES
-    (%(spell_name)s, %(spell_id)s, %(modes)s);'''
+
 INSERT_QUERY = '''
 INSERT INTO "lollov".runes
 (rune_name, rune_id, rune_key, category, rune_slot)
 VALUES
-(%(name)s, %(id)s, %(key)s, %(category)s, %(slot)s);
+(%(name)s, %(id)s, %(key)s, %(category)s, %(slot)s)
+ON CONFLICT (rune_id) DO NOTHING;
 '''
 
 for n, item in flattened_runes.items():
