@@ -27,7 +27,7 @@ def champ_lov(connection, api_key, lol_watcher):
 
         # --- SQL Insert Query ---
         INSERT_QUERY = """
-        INSERT INTO "lollov".lol_champions_info (
+        INSERT INTO "lollov".champions_info (
             id, key, name, title, blurb
         )
         VALUES (
