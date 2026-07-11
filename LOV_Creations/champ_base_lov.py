@@ -6,6 +6,7 @@ import pprint
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
 def champ_lov(connection, api_key, lol_watcher):
+    cur = connection.cursor()
     DDRegion = lol_watcher.data_dragon.versions_for_region('na1')['n']
     DDchamps = DDRegion['summoner']
     champs = lol_watcher.data_dragon.champions(DDchamps)
