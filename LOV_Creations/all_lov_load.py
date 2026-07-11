@@ -23,4 +23,5 @@ DDRegion = lol_watcher.data_dragon.versions_for_region('na1')['n']
 DDchamps = DDRegion['summoner']
 champs = lol_watcher.data_dragon.items(DDchamps)
 
-champ_lov(conn, API_KEY, lol_watcher=lol_watcher)
+if __name__ == "__main__":
+    champ_lov(conn, API_KEY, lol_watcher=lol_watcher)
