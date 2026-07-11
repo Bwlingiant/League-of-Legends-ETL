@@ -43,5 +43,5 @@ def champ_lov(connection, api_key, lol_watcher):
 
 
     print("✅ All champions processed.")
-    conn.commit()
-    conn.close()
+    connection.commit()
+    connection.close()
