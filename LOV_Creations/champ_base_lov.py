@@ -1,11 +1,4 @@
-import os
-import json
-import psycopg
-import sys
-import pprint
-from riotwatcher import LolWatcher, ApiError, RiotWatcher
-
-def champ_lov(connection, api_key, lol_watcher):
+def champ_lov(connection, lol_watcher):
     cur = connection.cursor()
     DDRegion = lol_watcher.data_dragon.versions_for_region('na1')['n']
     DDchamps = DDRegion['summoner']
