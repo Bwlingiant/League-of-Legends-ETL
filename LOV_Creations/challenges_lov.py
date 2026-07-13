@@ -33,7 +33,7 @@ def challenge_lov (connection, lol_watcher):
         }
 
         INSERT_QUERY = '''
-        INSERT INTO "lollov".challenges
+        INSERT INTO "lollov".lol_challenges
         (challenge_id, name, description, shortdescription, state, leaderboard,
         iron, bronze, silver, gold, platinum, diamond, master, grandmaster, challenger)
         VALUES
