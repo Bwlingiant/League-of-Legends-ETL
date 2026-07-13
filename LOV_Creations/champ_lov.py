@@ -15,10 +15,6 @@ conn = psycopg.connect(db_connection)
 
 
 
-
-# --- Champion directory ---
-DATA_DIR = '/home/bwlingiant/python_projects/League-of-Legends-ETL/LOV Creations/ddragon_champions'
-
 # --- SQL Insert Query ---
 INSERT_QUERY = """
 INSERT INTO "lollov".champions (
@@ -75,7 +71,7 @@ ON CONFLICT (id) DO UPDATE SET
     patch_version = EXCLUDED.patch_version;
 """
 
-# --- Parse and insert data ---
+'''# --- Parse and insert data ---
 with conn.cursor() as cur:
     for filename in os.listdir(DATA_DIR):
         if filename.endswith(".json"):
@@ -106,3 +102,4 @@ with conn.cursor() as cur:
 print("✅ All champions processed.")
 conn.commit()
 conn.close()
+'''

@@ -11,7 +11,6 @@ def challenge_lov (connection, lol_watcher):
     challenges = lol_watcher.challenges.config('na1')
 
     for ch in challenges:
-        pprint.pp(ch)
         localized_us = ch['localizedNames']['en_US']
         thresholds = ch['thresholds']
         challenges_dict = {

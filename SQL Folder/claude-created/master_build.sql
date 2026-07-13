@@ -2,7 +2,7 @@
 -- master_build.sql
 -- Run all schema creation scripts in dependency order.
 -- Usage (psql):
---   psql -U postgres -d yrden -f master_build.sql
+--   psql -U postgres -d test -f master_build.sql
 -- ============================================================
 
 \echo '--- 00: Creating schemas ---'
