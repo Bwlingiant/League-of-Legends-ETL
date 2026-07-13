@@ -35,5 +35,3 @@ def runes(connection, lol_watcher):
     print("All runes processed.")
 
     connection.commit()
-    connection.close()
-    print('Database connection closed.')

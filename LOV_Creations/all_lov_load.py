@@ -29,3 +29,5 @@ if __name__ == "__main__":
     champ_lov(conn, lol_watcher=lol_watcher)
     runes(conn, lol_watcher=lol_watcher)
     challenge_lov(conn, lol_watcher=lol_watcher)
+
+conn.close()

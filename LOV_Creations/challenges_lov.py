@@ -58,5 +58,3 @@ def challenge_lov (connection, lol_watcher):
         '''
         cur.execute(INSERT_QUERY, challenges_dict)
         connection.commit()
-
-    connection.close()
