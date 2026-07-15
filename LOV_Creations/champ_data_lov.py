@@ -94,4 +94,4 @@ def champ_data_lov(connection, lol_watcher):
             cur.execute(INSERT_QUERY, champion_data_dict)
             connection.commit()
 
-        print("✅ All champions processed.")
+    print("✅ All champions processed.")
