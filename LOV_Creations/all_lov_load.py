@@ -3,6 +3,7 @@ from runes_lov import runes
 from challenges_lov import challenge_lov
 from champ_data_lov import champ_data_lov
 from SummonerSpellLOV import summoners_lov
+from item_lov import item_lov
 import os
 import json
 import psycopg
@@ -33,5 +34,6 @@ if __name__ == "__main__":
     challenge_lov(conn, lol_watcher=lol_watcher)
     champ_data_lov(conn, lol_watcher=lol_watcher)
     summoners_lov(conn, lol_watcher=lol_watcher)
+    item_lov(conn, lol_watcher=lol_watcher)
 
 conn.close()
