@@ -4,11 +4,10 @@ from challenges_lov import challenge_lov
 from champ_data_lov import champ_data_lov
 from SummonerSpellLOV import summoners_lov
 from item_lov import item_lov
+from lol_queues import queues_lov
+from maps_lov import maps_lov
 import os
-import json
 import psycopg
-import sys
-import pprint
 from riotwatcher import LolWatcher, ApiError, RiotWatcher
 
 API_KEY = os.environ['API_KEY_SERVICE']
@@ -34,6 +33,8 @@ if __name__ == "__main__":
     challenge_lov(conn, lol_watcher=lol_watcher)
     champ_data_lov(conn, lol_watcher=lol_watcher)
     summoners_lov(conn, lol_watcher=lol_watcher)
-    item_lov(conn, lol_watcher=lol_watcher)
+    # item_lov(conn, lol_watcher=lol_watcher)
+    queues_lov(conn)
+    maps_lov(conn)
 
 conn.close()

@@ -13,5 +13,5 @@ def summoners_lov(connection, lol_watcher):
         (spell_name, spell_id, modes)
         VALUES
         (%(spell_name)s, %(spell_id)s, %(modes)s);''', summoner_dict)
-        print(f"{n} has been added to the Summoner Spell LOV.")
     connection.commit()
+    print(f"Summoner Spells processed.")
