@@ -1,3 +1,4 @@
+from psycopg.types.json import Jsonb
 def item_lov(connection, lol_watcher):
     DDRegion = lol_watcher.data_dragon.versions_for_region('na1')['n']
     DDitems = DDRegion['summoner']
@@ -6,9 +7,9 @@ def item_lov(connection, lol_watcher):
     patch_version = items['version']
     for n in item_data:
         gold = item_data[n]['gold']
-        into = item_data[n].get('into')
+        into = Jsonb(item_data[n].get('into'))
 
-        tags = {n for n in item_data[n]['tags']}
+        tags = Jsonb(item_data[n]['tags'])
         item_dict = {
             "id" : n,
             "name" : item_data[n]['name'],
@@ -19,14 +20,14 @@ def item_lov(connection, lol_watcher):
             "gold_total" : gold['total'],
             "purchasable" : gold['purchasable'],
             "tags" : tags,
-            "maps" : item_data[n]['maps'],
-            "stats" : item_data[n]['stats'],
+            "maps" : Jsonb(item_data[n]['maps']),
+            "stats" : Jsonb(item_data[n]['stats']),
             "patch_version" : patch_version
         }
         
         INSERT_QUERY = """
         INSERT INTO "lollov".items (
-            id, name, colloq, into, gold_base, gold_total, gold_sell, purchasable,
+            id, name, colloq, "into", gold_base, gold_total, gold_sell, purchasable,
             tags, maps, stats, patch_version
         )
         VALUES (
@@ -37,7 +38,7 @@ def item_lov(connection, lol_watcher):
             id = EXCLUDED.id,
             name = EXCLUDED.name,
             colloq = EXCLUDED.colloq,
-            into = EXCLUDED.into,
+            "into" = EXCLUDED."into",
             gold_base = EXCLUDED.gold_base,
             gold_total = EXCLUDED.gold_total,
             gold_sell = EXCLUDED.gold_sell,
