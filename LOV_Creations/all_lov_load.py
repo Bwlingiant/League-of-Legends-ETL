@@ -28,13 +28,14 @@ DDchamps = DDRegion['summoner']
 champs = lol_watcher.data_dragon.items(DDchamps)
 
 if __name__ == "__main__":
-    # champ_lov(conn, lol_watcher=lol_watcher)
-    # runes(conn, lol_watcher=lol_watcher)
-    # challenge_lov(conn, lol_watcher=lol_watcher)
-    # champ_data_lov(conn, lol_watcher=lol_watcher)
-    # summoners_lov(conn, lol_watcher=lol_watcher)
+    champ_lov(conn, lol_watcher=lol_watcher)
+    runes(conn, lol_watcher=lol_watcher)
+    challenge_lov(conn, lol_watcher=lol_watcher)
+    champ_data_lov(conn, lol_watcher=lol_watcher)
+    summoners_lov(conn, lol_watcher=lol_watcher)
     item_lov(conn, lol_watcher=lol_watcher)
-    # queues_lov(conn)
-    # maps_lov(conn)
+    queues_lov(conn)
+    maps_lov(conn)
 
+print('All LOVs processed.')
 conn.close()

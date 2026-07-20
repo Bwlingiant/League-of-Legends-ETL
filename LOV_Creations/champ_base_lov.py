@@ -4,6 +4,7 @@ def champ_lov(connection, lol_watcher):
     DDchamps = DDRegion['summoner']
     champs = lol_watcher.data_dragon.champions(DDchamps)
     champ_data = champs['data']
+    patch_version = champs['version']
     # pprint.pp(champ_data)
     # print(type(champs))
 
@@ -11,26 +12,29 @@ def champ_lov(connection, lol_watcher):
         # print(champ_data.keys())
         # print(champ_data[n])
         champ_info = champ_data[n]
+        icon_url = f"https://ddragon.leagueoflegends.com/cdn/{patch_version}/img/champion/{champ_info['image']['full']}"
         champion_data_dict = {"id": champ_info['id'],
                             "key" : champ_info['key'],
                             "name": champ_info['name'],
                             "title": champ_info['title'],
-                            "blurb": champ_info['blurb']
+                            "blurb": champ_info['blurb'],
+                            "icon_url": icon_url
                             }
 
         # --- SQL Insert Query ---
         INSERT_QUERY = """
         INSERT INTO "lollov".champions_info (
-            id, key, name, title, blurb
+            id, key, name, title, blurb, icon_url
         )
         VALUES (
-            %(id)s, %(key)s, %(name)s, %(title)s, %(blurb)s
+            %(id)s, %(key)s, %(name)s, %(title)s, %(blurb)s, %(icon_url)s
         )
         ON CONFLICT (id) DO UPDATE SET
             key = EXCLUDED.key,
             name = EXCLUDED.name,
             title = EXCLUDED.title,
-            blurb = EXCLUDED.blurb
+            blurb = EXCLUDED.blurb,
+            icon_url = EXCLUDED.icon_url
         """
         cur.execute(INSERT_QUERY, champion_data_dict)
 

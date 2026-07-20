@@ -9,7 +9,6 @@ def challenge_lov (connection, lol_watcher):
     cur = connection.cursor()
     
     challenges = lol_watcher.challenges.config('na1')
-
     for ch in challenges:
         localized_us = ch['localizedNames']['en_US']
         thresholds = ch['thresholds']
